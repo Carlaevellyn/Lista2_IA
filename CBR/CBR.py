@@ -1,7 +1,9 @@
 import json
 import streamlit as st
+from collections import Counter
 
 ARQUIVO = "casos.json"
+ARQUIVO_HISTORICO = "historico.json"
 
 SINTOMAS_DISPONIVEIS = [
     "febre",
@@ -65,30 +67,70 @@ def salvar_casos(casos):
 
 def calcular_similaridade(
     sintomas_usuario,
+    caso
+):
+
+    pontos_obtidos = 0
+    pontos_totais = 0
+
+    pesos = caso.get(
+        "pesos",
+        {}
+    )
+
+    for sintoma in caso["sintomas"]:
+
+        peso = pesos.get(
+            sintoma,
+            1
+        )
+
+        pontos_totais += peso
+
+        if sintoma in sintomas_usuario:
+
+            pontos_obtidos += peso
+
+    if pontos_totais == 0:
+        return 0
+
+    return round(
+        (
+            pontos_obtidos /
+            pontos_totais
+        ) * 100,
+        2
+    )
+def sintomas_em_comum(
+    sintomas_usuario,
     sintomas_caso
 ):
 
-    iguais = len(
+    return list(
         set(sintomas_usuario)
         &
         set(sintomas_caso)
     )
+def nivel_confianca(similaridade):
 
-    total = len(
-        set(sintomas_usuario)
-        |
+    if similaridade >= 80:
+        return "🟢 Alta"
+
+    elif similaridade >= 60:
+        return "🟡 Média"
+
+    else:
+        return "🔴 Baixa"
+def sintomas_diferentes(
+    sintomas_usuario,
+    sintomas_caso
+):
+
+    return list(
         set(sintomas_caso)
-    )
-
-    if total == 0:
-        return 0
-
-    return round(
-        (iguais / total) * 100,
-        2
-    )
-
-
+        -
+        set(sintomas_usuario)
+    )    
 def recuperar_casos(
     sintomas_usuario,
     casos
@@ -100,7 +142,7 @@ def recuperar_casos(
 
         similaridade = calcular_similaridade(
             sintomas_usuario,
-            caso["sintomas"]
+            caso
         )
 
         resultados.append(
@@ -116,8 +158,53 @@ def recuperar_casos(
     )
 
     return resultados
+def salvar_historico(registro):
 
+    try:
 
+        with open(
+            ARQUIVO_HISTORICO,
+            "r",
+            encoding="utf-8"
+        ) as f:
+
+            historico = json.load(f)
+
+    except:
+
+        historico = []
+
+    historico.append(
+        registro
+    )
+
+    with open(
+        ARQUIVO_HISTORICO,
+        "w",
+        encoding="utf-8"
+    ) as f:
+
+        json.dump(
+            historico,
+            f,
+            ensure_ascii=False,
+            indent=4
+        )
+def carregar_historico():
+
+    try:
+
+        with open(
+            ARQUIVO_HISTORICO,
+            "r",
+            encoding="utf-8"
+        ) as f:
+
+            return json.load(f)
+
+    except:
+
+        return []
 # =========================
 # CONFIGURAÇÃO STREAMLIT
 # =========================
@@ -127,62 +214,92 @@ st.set_page_config(
     page_icon="🩺",
     layout="centered"
 )
+casos = carregar_casos()
 
-st.title("🩺 Sistema CBR Médico")
-st.caption(
+tab_consulta, tab_estatisticas = st.tabs(
+    [
+        "🩺 Consulta",
+        "📊 Estatísticas"
+    ]
+)
+with tab_consulta:
+
+    st.title("🩺 Sistema CBR Médico")
+    
+    st.caption(
     "Case-Based Reasoning (CBR)"
 )
+    st.info(
+    """
+    🔄 Ciclo CBR utilizado:
 
-casos = carregar_casos()
+    1️⃣ Retrieve → Recupera os casos mais parecidos
+
+    2️⃣ Reuse → Sugere diagnóstico e tratamento
+
+    3️⃣ Revise → Usuário valida ou corrige
+
+    4️⃣ Retain → Novo caso é armazenado
+    """
+)
+    casos = carregar_casos()
 
 # =========================
 # SESSION STATE
 # =========================
 
-if "buscou" not in st.session_state:
-    st.session_state.buscou = False
+    if "buscou" not in st.session_state:
+        st.session_state.buscou = False
 
-if "resultados" not in st.session_state:
-    st.session_state.resultados = []
+    if "resultados" not in st.session_state:
+        st.session_state.resultados = []
 
-if "sintomas_usuario" not in st.session_state:
-    st.session_state.sintomas_usuario = []
-
+    if "sintomas_usuario" not in st.session_state:
+        st.session_state.sintomas_usuario = []
+    
+    if "historico_salvo" not in st.session_state:
+        st.session_state.historico_salvo = False
 
 # =========================
 # SINTOMAS
 # =========================
 
-st.subheader(
-    "Selecione os sintomas"
+    st.subheader(
+        "Selecione os sintomas"
+)
+    st.subheader(
+    "Observações do paciente"
 )
 
-col1, col2 = st.columns(2)
+    observacoes = st.text_area(
+    "Descreva informações adicionais"
+)
+    col1, col2 = st.columns(2)
 
-sintomas_usuario = []
+    sintomas_usuario = []
 
-with col1:
+    with col1:
 
-    for sintoma in SINTOMAS_DISPONIVEIS[:9]:
+        for sintoma in SINTOMAS_DISPONIVEIS[:9]:
 
-        if st.checkbox(
-            sintoma,
-            key=f"cb_{sintoma}"
+            if st.checkbox(
+                sintoma,
+                key=f"cb_{sintoma}"
         ):
-            sintomas_usuario.append(
-                sintoma
+                sintomas_usuario.append(
+                    sintoma
             )
 
-with col2:
+    with col2:
 
-    for sintoma in SINTOMAS_DISPONIVEIS[9:]:
+        for sintoma in SINTOMAS_DISPONIVEIS[9:]:
 
-        if st.checkbox(
-            sintoma,
-            key=f"cb_{sintoma}"
+            if st.checkbox(
+                sintoma,
+                key=f"cb_{sintoma}"
         ):
-            sintomas_usuario.append(
-                sintoma
+                sintomas_usuario.append(
+                    sintoma
             )
 
 
@@ -190,135 +307,283 @@ with col2:
 # BUSCA
 # =========================
 
-if st.button(
-    "🔍 Buscar Diagnóstico",
-    use_container_width=True
-):
+    if st.button(
+        "🔍 Buscar Diagnóstico",
+        use_container_width=True
+    ):
 
-    if len(sintomas_usuario) == 0:
+        if len(sintomas_usuario) == 0:
 
-        st.warning(
-            "Selecione pelo menos um sintoma."
+            st.warning(
+                "Selecione pelo menos um sintoma."
         )
 
-    else:
+        else:
 
-        resultados = recuperar_casos(
-            sintomas_usuario,
-            casos
+            resultados = recuperar_casos(
+                sintomas_usuario,
+                casos
         )
 
-        st.session_state.resultados = resultados
-        st.session_state.sintomas_usuario = sintomas_usuario
-        st.session_state.buscou = True
+            st.session_state.resultados = resultados
+            st.session_state.sintomas_usuario = sintomas_usuario
+            st.session_state.buscou = True
 
 
 # =========================
 # EXIBIÇÃO DOS RESULTADOS
 # =========================
 
-if st.session_state.buscou:
+    if st.session_state.buscou:
 
-    resultados = (
-        st.session_state.resultados
+        resultados = (
+            st.session_state.resultados
     )
+        resultados_filtrados = []
+        diagnosticos_vistos = set()
 
-    st.divider()
+        for resultado in resultados:
 
-    st.subheader(
-        "🏆 Casos Mais Semelhantes"
-    )
+            diagnostico = resultado["caso"]["diagnostico"]
 
-    for posicao, resultado in enumerate(
-        resultados[:3],
-        start=1
-    ):
+            if diagnostico not in diagnosticos_vistos:
 
-        caso = resultado["caso"]
-
-        st.markdown(
-            f"### {posicao}º Lugar"
+                resultados_filtrados.append(
+                    resultado
         )
 
-        st.write(
-            f"**Diagnóstico:** "
-            f"{caso['diagnostico']}"
+                diagnosticos_vistos.add(
+                    diagnostico
         )
-
-        st.progress(
-            int(resultado["similaridade"])
-        )
-
-        st.write(
-            f"Similaridade: "
-            f"{resultado['similaridade']}%"
-        )
-
-        st.write(
-            f"Sintomas do caso: "
-            f"{', '.join(caso['sintomas'])}"
-        )
-
         st.divider()
+
+        st.header(
+            "1️⃣ Retrieve (Recuperação)"
+    )
+
+        st.subheader(
+            "🏆 Casos Mais Semelhantes"
+    )
+        with st.expander("📋 Ver todos os casos recuperados"
+                         ):
+
+            st.write(
+                "Casos recuperados com base nos sintomas fornecidos."
+        )
+
+            st.write(
+                f"Total de casos recuperados: "
+                f"{len(resultados_filtrados)}"
+        )
+            dados = []
+
+            for resultado in resultados_filtrados:
+
+                dados.append({
+
+                    "Diagnóstico":
+                    resultado["caso"]["diagnostico"],
+
+                    "Similaridade":
+                    resultado["similaridade"]
+
+                })
+
+            st.dataframe(
+                dados,
+                use_container_width=True
+            )
+
+            st.caption(
+                f"{len(resultados_filtrados)} casos encontrados"
+        )
+
+        for posicao, resultado in enumerate(
+            resultados_filtrados[:3],
+            start=1
+            ):
+
+            caso = resultado["caso"]
+
+            coincidentes = sintomas_em_comum(
+                st.session_state.sintomas_usuario,
+                caso["sintomas"]
+        )
+            diferentes = sintomas_diferentes(
+                st.session_state.sintomas_usuario,
+                caso["sintomas"]
+        )
+            
+            st.subheader(
+                f"🏅 {posicao}º Lugar"
+        )
+
+            st.write(
+                f"**Diagnóstico:** "
+                f"{caso['diagnostico']}"
+        )
+            st.write(
+                "✅ Sintomas coincidentes:"
+        )
+
+            st.success(
+                ", ".join(coincidentes)
+        )
+            st.write(
+                "❌ Sintomas não coincidentes:"
+            )
+
+            st.warning(
+                ", ".join(diferentes)
+            )
+            st.progress(
+                int(resultado["similaridade"])
+        )
+
+            st.write(
+                f"Similaridade: "
+                f"{resultado['similaridade']}%"
+        )
+
+            st.write(
+                f"Sintomas do caso: "
+                f"{', '.join(caso['sintomas'])}"
+        )
+            if "pesos" in caso:
+
+                 with st.expander(
+                "⚖️ Pesos dos sintomas:"
+                ):
+
+                    st.json(
+                        caso["pesos"]
+            )
+            st.divider()
 
     # =====================
     # REUSE
     # =====================
-
-    melhor_caso = resultados[0]["caso"]
-
-    st.success(
-        f"Diagnóstico sugerido: "
-        f"{melhor_caso['diagnostico']}"
+        st.header(
+            "2️⃣ Reuse (Reutilização)"
     )
 
-    st.info(
-        f"Tratamento sugerido: "
-        f"{melhor_caso['tratamento']}"
+        melhor_caso = resultados[0]["caso"]
+
+        melhor_similaridade = resultados[0]["similaridade"]
+
+    # Salva no histórico apenas uma vez
+        if not st.session_state.historico_salvo:
+
+            salvar_historico({
+
+            "sintomas":
+            st.session_state.sintomas_usuario,
+
+            "observacoes":
+            observacoes,
+
+            "diagnostico":
+            melhor_caso["diagnostico"],
+
+            "similaridade":
+            melhor_similaridade
+
+    })
+
+            st.session_state.historico_salvo = True
+
+
+        confianca = nivel_confianca(
+            melhor_similaridade
+    )
+        st.subheader(
+        "Resultado da Análise"
     )
 
+        
+        st.progress(
+            int(melhor_similaridade)
+        )
+        st.success(
+            f"🩺 Diagnóstico sugerido: "
+            f"{melhor_caso['diagnostico']}"
+        )
+
+        st.warning(
+            f"💊 Tratamento sugerido: "
+            f"{melhor_caso['tratamento']}"
+        )
+        st.info(
+            f"Grau de confiança: {confianca} ({melhor_similaridade}%)"
+    )
     # =====================
     # REVISE
     # =====================
-
-    st.subheader(
-        "Revise a solução"
+        st.header(
+            "3️⃣ Revise (Revisão)"
     )
+        st.subheader(
+            "Revise a solução"
+    )
+        if st.button(
+            "✅ Aceitar Diagnóstico"
+        ):
+            salvar_historico({
 
-    ajudou = st.radio(
-        "A solução foi útil?",
-        ["Sim", "Não"]
+                "sintomas":
+                st.session_state.sintomas_usuario,
+
+                "diagnostico":
+                melhor_caso["diagnostico"],
+
+                "similaridade":
+                melhor_similaridade,
+
+                "validado":
+                True
+
+            })
+
+            st.success(
+            "Diagnóstico validado."
+    )
+        ajudou = st.radio(
+            "A solução foi útil?",
+            ["Sim", "Não"]
     )
 
     # =====================
     # RETAIN
     # =====================
 
-    if ajudou == "Não":
+        if ajudou == "Não":
 
-        st.subheader(
+            st.header(
+            "4️⃣ Retain (Retenção)"
+        )
+            st.subheader(
             "➕ Adicionar Novo Caso"
         )
 
-        novo_diagnostico = st.text_input(
+            novo_diagnostico = st.text_input(
             "Diagnóstico correto"
         )
 
-        novo_tratamento = st.text_area(
+            novo_tratamento = st.text_area(
             "Tratamento correto"
         )
 
-        if st.button(
-            "💾 Salvar Novo Caso"
+            if st.button(
+                "💾 Salvar Novo Caso"
         ):
 
-            if (
-                novo_diagnostico.strip()
-                and
-                novo_tratamento.strip()
+                if (
+                    novo_diagnostico.strip()
+                    and
+                    novo_tratamento.strip()
             ):
 
-                novo_caso = {
+                    novo_caso = {
 
                     "id":
                     len(casos) + 1,
@@ -330,39 +595,137 @@ if st.session_state.buscou:
                     novo_diagnostico,
 
                     "tratamento":
-                    novo_tratamento
+                    novo_tratamento,
+
+                    "pesos": {
+                        sintoma: 2
+                        for sintoma in st.session_state.sintomas_usuario
+                    }
                 }
+                
+            
 
-                casos.append(
-                    novo_caso
+                    casos.append(
+                        novo_caso
                 )
 
-                salvar_casos(
-                    casos
+                    salvar_casos(
+                        casos
                 )
 
-                st.success(
-                    "✅ Novo caso adicionado à base de conhecimento!"
+                    st.success(
+                        "✅ Novo caso adicionado à base de conhecimento!"
                 )
 
-            else:
+                else:
 
-                st.error(
-                    "Preencha diagnóstico e tratamento."
+                    st.error(
+                        "Preencha diagnóstico e tratamento."
                 )
 
     # =====================
     # NOVA CONSULTA
     # =====================
 
-    st.divider()
+        st.divider()
 
-    if st.button(
-        "🔄 Nova Consulta"
+        if st.button(
+            "🔄 Nova Consulta"
     ):
 
-        st.session_state.buscou = False
-        st.session_state.resultados = []
-        st.session_state.sintomas_usuario = []
+            st.session_state.buscou = False
+            st.session_state.resultados = []
+            st.session_state.sintomas_usuario = []
+            st.session_state.historico_salvo = False
 
-        st.rerun()
+            st.rerun()
+
+with tab_estatisticas:
+
+    st.title("📊 Estatísticas do Sistema")
+
+    historico = carregar_historico()
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+
+        st.metric(
+            "Casos cadastrados",
+            len(casos)
+        )
+
+    with col2:
+
+        st.metric(
+            "Doenças cadastradas",
+            len(
+                set(
+                    caso["diagnostico"]
+                    for caso in casos
+                )
+            )
+        )
+
+    st.metric(
+        "Consultas realizadas",
+        len(historico)
+    )
+
+    if len(historico) > 0:
+
+        media = sum(
+            h["similaridade"]
+            for h in historico
+        ) / len(historico)
+
+        st.metric(
+            "Média de Similaridade",
+            f"{media:.1f}%"
+        )
+    if len(historico) > 0:
+
+        contador = Counter(
+            h["diagnostico"]
+            for h in historico
+        )
+
+        st.subheader(
+        "Diagnósticos mais sugeridos"
+    )
+
+        for nome, qtd in contador.most_common(5):
+
+            st.write(
+                f"• {nome}: {qtd} consultas"
+        )       
+    if len(historico) > 0:
+
+        st.subheader(
+            "Histórico de Consultas"
+        )
+
+        for consulta in reversed(
+            historico[-10:]
+        ):
+
+            st.write(
+                f"""
+                Diagnóstico: {consulta['diagnostico']}
+                | Similaridade: {consulta['similaridade']}%
+                """
+        )        
+
+    st.subheader(
+    "📈 Distribuição dos Diagnósticos"
+)
+
+    dados_grafico = Counter(
+        h["diagnostico"]
+        for h in historico
+)
+
+    st.bar_chart(
+        dados_grafico,
+        horizontal=True
+)

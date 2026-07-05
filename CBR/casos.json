@@ -1,162 +1,130 @@
 [
-    {
-        "id": 1,
-        "sintomas": [
-            "febre",
-            "tosse",
-            "dor_muscular"
-        ],
-        "diagnostico": "Gripe",
-        "tratamento": "Repouso e hidratação"
-    },
-    {
-        "id": 2,
-        "sintomas": [
-            "febre",
-            "tosse",
-            "falta_ar"
-        ],
-        "diagnostico": "COVID-19",
-        "tratamento": "Isolamento e acompanhamento médico"
-    },
-    {
-        "id": 3,
-        "sintomas": [
-            "febre",
-            "dor_muscular",
-            "dor_cabeca"
-        ],
-        "diagnostico": "Dengue",
-        "tratamento": "Hidratação intensa"
-    },
-    {
-        "id": 4,
-        "sintomas": [
-            "dor_estomago",
-            "nausea",
-            "azia"
-        ],
-        "diagnostico": "Gastrite",
-        "tratamento": "Dieta leve e medicação"
-    },
-    {
-        "id": 5,
-        "sintomas": [
-            "dor_cabeca",
-            "congestao_nasal",
-            "coriza"
-        ],
-        "diagnostico": "Sinusite",
-        "tratamento": "Lavagem nasal"
-    },
-    {
-        "id": 6,
-        "sintomas": [
-            "dor_garganta",
-            "febre",
-            "tosse"
-        ],
-        "diagnostico": "Amigdalite",
-        "tratamento": "Antibióticos conforme orientação médica"
-    },
-    {
-        "id": 7,
-        "sintomas": [
-            "espirros",
-            "coriza",
-            "coceira_nariz"
-        ],
-        "diagnostico": "Rinite Alérgica",
-        "tratamento": "Antialérgicos"
-    },
-    {
-        "id": 8,
-        "sintomas": [
-            "dor_ouvido",
-            "febre",
-            "perda_audicao"
-        ],
-        "diagnostico": "Otite",
-        "tratamento": "Antibióticos"
-    },
-    {
-        "id": 9,
-        "sintomas": [
-            "diarreia",
-            "nausea",
-            "dor_estomago"
-        ],
-        "diagnostico": "Gastroenterite",
-        "tratamento": "Hidratação e repouso"
-    },
-    {
-        "id": 10,
-        "sintomas": [
-            "falta_ar",
-            "chiado_peito",
-            "tosse"
-        ],
-        "diagnostico": "Asma",
-        "tratamento": "Broncodilatadores"
-    },
-    {
-        "id": 11,
-        "sintomas": [
-            "febre",
-            "tosse",
-            "dor_cabeca"
-        ],
-        "diagnostico": "Gripe",
-        "tratamento": "Repouso e líquidos"
-    },
-    {
-        "id": 12,
-        "sintomas": [
-            "febre",
-            "falta_ar",
-            "dor_cabeca"
-        ],
-        "diagnostico": "COVID-19",
-        "tratamento": "Monitoramento médico"
-    },
-    {
-        "id": 13,
-        "sintomas": [
-            "febre",
-            "manchas_pele",
-            "dor_muscular"
-        ],
-        "diagnostico": "Dengue",
-        "tratamento": "Hidratação e observação"
-    },
-    {
-        "id": 14,
-        "sintomas": [
-            "azia",
-            "dor_estomago",
-            "nausea"
-        ],
-        "diagnostico": "Gastrite",
-        "tratamento": "Dieta leve"
-    },
-    {
-        "id": 15,
-        "sintomas": [
-            "congestao_nasal",
-            "coriza",
-            "dor_cabeca"
-        ],
-        "diagnostico": "Sinusite",
-        "tratamento": "Lavagem nasal e medicação"
-    },
-    {
-        "id": 16,
-        "sintomas": [
-            "febre",
-            "dor_cabeca",
-            "dor_garganta"
-        ],
-        "diagnostico": "Faringite",
-        "tratamento": "Repouso, hidratação e medicação conforme orientação médica."
-    }
+{
+"id": 1,
+"sintomas": ["febre", "tosse", "dor_muscular"],
+"pesos": {"febre": 3, "tosse": 2, "dor_muscular": 2},
+"diagnostico": "Gripe",
+"tratamento": "Repouso e hidratação",
+"categoria": "Viral"
+},
+{
+"id": 2,
+"sintomas": ["febre", "tosse", "falta_ar"],
+"pesos": {"febre": 2, "tosse": 2, "falta_ar": 4},
+"diagnostico": "COVID-19",
+"tratamento": "Isolamento e acompanhamento médico",
+"categoria": "Viral"
+},
+{
+"id": 3,
+"sintomas": ["febre", "dor_muscular", "dor_cabeca"],
+"pesos": {"febre": 3, "dor_muscular": 3, "dor_cabeca": 2},
+"diagnostico": "Dengue",
+"tratamento": "Hidratação intensa",
+"categoria": "Viral"
+},
+{
+"id": 4,
+"sintomas": ["dor_estomago", "nausea", "azia"],
+"pesos": {"dor_estomago": 3, "nausea": 2, "azia": 3},
+"diagnostico": "Gastrite",
+"tratamento": "Dieta leve e medicação",
+"categoria": "Gastrointestinal"
+},
+{
+"id": 5,
+"sintomas": ["dor_cabeca", "congestao_nasal", "coriza"],
+"pesos": {"dor_cabeca": 2, "congestao_nasal": 3, "coriza": 3},
+"diagnostico": "Sinusite",
+"tratamento": "Lavagem nasal",
+"categoria": "Respiratória"
+},
+{
+"id": 6,
+"sintomas": ["dor_garganta", "febre", "tosse"],
+"pesos": {"dor_garganta": 4, "febre": 2, "tosse": 2},
+"diagnostico": "Amigdalite",
+"tratamento": "Antibióticos conforme orientação médica",
+"categoria": "Infecção"
+},
+{
+"id": 7,
+"sintomas": ["espirros", "coriza", "coceira_nariz"],
+"pesos": {"espirros": 4, "coriza": 3, "coceira_nariz": 5},
+"diagnostico": "Rinite Alérgica",
+"tratamento": "Antialérgicos",
+"categoria": "Alérgica"
+},
+{
+"id": 8,
+"sintomas": ["dor_ouvido", "febre", "perda_audicao"],
+"pesos": {"dor_ouvido": 4, "febre": 2, "perda_audicao": 5},
+"diagnostico": "Otite",
+"tratamento": "Antibióticos",
+"categoria": "Infecção"
+},
+{
+"id": 9,
+"sintomas": ["diarreia", "nausea", "dor_estomago"],
+"pesos": {"diarreia": 4, "nausea": 2, "dor_estomago": 3},
+"diagnostico": "Gastroenterite",
+"tratamento": "Hidratação e repouso",
+"categoria": "Gastrointestinal"
+},
+{
+"id": 10,
+"sintomas": ["falta_ar", "chiado_peito", "tosse"],
+"pesos": {"falta_ar": 4, "chiado_peito": 5, "tosse": 2},
+"diagnostico": "Asma",
+"tratamento": "Broncodilatadores",
+"categoria": "Respiratória"
+},
+{
+"id": 11,
+"sintomas": ["febre", "tosse", "dor_cabeca"],
+"pesos": {"febre": 3, "tosse": 2, "dor_cabeca": 2},
+"diagnostico": "Gripe",
+"tratamento": "Repouso e líquidos",
+"categoria": "Viral"
+},
+{
+"id": 12,
+"sintomas": ["febre", "falta_ar", "dor_cabeca"],
+"pesos": {"febre": 2, "falta_ar": 4, "dor_cabeca": 2},
+"diagnostico": "COVID-19",
+"tratamento": "Monitoramento médico",
+"categoria": "Viral"
+},
+{
+"id": 13,
+"sintomas": ["febre", "manchas_pele", "dor_muscular"],
+"pesos": {"febre": 3, "manchas_pele": 4, "dor_muscular": 3},
+"diagnostico": "Dengue",
+"tratamento": "Hidratação e observação",
+"categoria": "Viral"
+},
+{
+"id": 14,
+"sintomas": ["azia", "dor_estomago", "nausea"],
+"pesos": {"azia": 3, "dor_estomago": 3, "nausea": 2},
+"diagnostico": "Gastrite",
+"tratamento": "Dieta leve",
+"categoria": "Gastrointestinal"
+},
+{
+"id": 15,
+"sintomas": ["congestao_nasal", "coriza", "dor_cabeca"],
+"pesos": {"congestao_nasal": 3, "coriza": 3, "dor_cabeca": 2},
+"diagnostico": "Sinusite",
+"tratamento": "Lavagem nasal e medicação",
+"categoria": "Respiratória"
+},
+{
+"id": 16,
+"sintomas": ["febre", "dor_cabeca", "dor_garganta"],
+"pesos": {"febre": 3, "dor_cabeca": 2, "dor_garganta": 4},
+"diagnostico": "Faringite",
+"tratamento": "Repouso, hidratação e medicação conforme orientação médica.",
+"categoria": "Infecção"
+}
 ]
