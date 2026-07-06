@@ -1,0 +1,659 @@
+{
+  "dominio": "Suporte Técnico de Computadores",
+  "objetivos": [
+    "diagnostico",
+    "recomendacao"
+  ],
+  "variaveis": {
+    "liga": {
+      "nome": "liga",
+      "pergunta": "O computador liga (acende luz/ventoinha)?",
+      "valores": [
+        "sim",
+        "nao"
+      ],
+      "perguntavel": true
+    },
+    "tela": {
+      "nome": "tela",
+      "pergunta": "Como está a imagem na tela?",
+      "valores": [
+        "normal",
+        "preta",
+        "azul"
+      ],
+      "perguntavel": true
+    },
+    "bipes": {
+      "nome": "bipes",
+      "pergunta": "Há bipes (beeps) ao ligar?",
+      "valores": [
+        "nenhum",
+        "repetidos",
+        "longo"
+      ],
+      "perguntavel": true
+    },
+    "cheiro_queimado": {
+      "nome": "cheiro_queimado",
+      "pergunta": "Você sente cheiro de queimado vindo do gabinete?",
+      "valores": [
+        "sim",
+        "nao"
+      ],
+      "perguntavel": true
+    },
+    "reinicia": {
+      "nome": "reinicia",
+      "pergunta": "O computador reinicia ou desliga sozinho?",
+      "valores": [
+        "sim",
+        "nao"
+      ],
+      "perguntavel": true
+    },
+    "temperatura": {
+      "nome": "temperatura",
+      "pergunta": "O computador esquenta muito (fica quente ao toque)?",
+      "valores": [
+        "alta",
+        "normal"
+      ],
+      "perguntavel": true
+    },
+    "ventoinha": {
+      "nome": "ventoinha",
+      "pergunta": "Como está o barulho da ventoinha (cooler)?",
+      "valores": [
+        "alta",
+        "normal",
+        "parada"
+      ],
+      "perguntavel": true
+    },
+    "lentidao": {
+      "nome": "lentidao",
+      "pergunta": "O sistema está anormalmente lento?",
+      "valores": [
+        "sim",
+        "nao"
+      ],
+      "perguntavel": true
+    },
+    "popups": {
+      "nome": "popups",
+      "pergunta": "Aparecem pop-ups/anúncios estranhos?",
+      "valores": [
+        "sim",
+        "nao"
+      ],
+      "perguntavel": true
+    },
+    "programas_desconhecidos": {
+      "nome": "programas_desconhecidos",
+      "pergunta": "Surgiram programas que você não instalou?",
+      "valores": [
+        "sim",
+        "nao"
+      ],
+      "perguntavel": true
+    },
+    "internet_neste_pc": {
+      "nome": "internet_neste_pc",
+      "pergunta": "A internet funciona NESTE computador?",
+      "valores": [
+        "sim",
+        "nao"
+      ],
+      "perguntavel": true
+    },
+    "internet_outros": {
+      "nome": "internet_outros",
+      "pergunta": "A internet funciona em OUTROS aparelhos (celular/TV)?",
+      "valores": [
+        "sim",
+        "nao"
+      ],
+      "perguntavel": true
+    },
+    "ruido_hd": {
+      "nome": "ruido_hd",
+      "pergunta": "O HD/disco faz barulho de clique repetitivo?",
+      "valores": [
+        "sim",
+        "nao"
+      ],
+      "perguntavel": true
+    },
+    "erro_disco": {
+      "nome": "erro_disco",
+      "pergunta": "Aparecem mensagens de erro de leitura/disco?",
+      "valores": [
+        "sim",
+        "nao"
+      ],
+      "perguntavel": true
+    },
+    "bateria_dura": {
+      "nome": "bateria_dura",
+      "pergunta": "A bateria do notebook descarrega muito rápido?",
+      "valores": [
+        "sim",
+        "nao"
+      ],
+      "perguntavel": true
+    },
+    "e_notebook": {
+      "nome": "e_notebook",
+      "pergunta": "O equipamento é um notebook?",
+      "valores": [
+        "sim",
+        "nao"
+      ],
+      "perguntavel": true
+    },
+    "poeira": {
+      "nome": "poeira",
+      "pergunta": "Há muita poeira acumulada dentro do gabinete?",
+      "valores": [
+        "sim",
+        "nao"
+      ],
+      "perguntavel": true
+    },
+    "diagnostico": {
+      "nome": "diagnostico",
+      "pergunta": "Diagnóstico provável",
+      "valores": [
+        "fonte_defeituosa",
+        "memoria_ram",
+        "superaquecimento",
+        "malware",
+        "falha_disco",
+        "problema_provedor",
+        "rede_local",
+        "bateria_degradada"
+      ],
+      "perguntavel": false
+    },
+    "recomendacao": {
+      "nome": "recomendacao",
+      "pergunta": "Recomendação de ação",
+      "valores": [
+        "trocar_fonte",
+        "reassentar_testar_ram",
+        "limpar_e_pasta_termica",
+        "antivirus_e_backup",
+        "backup_e_trocar_disco",
+        "reiniciar_roteador_contatar_provedor",
+        "verificar_drivers_e_config_rede",
+        "substituir_bateria"
+      ],
+      "perguntavel": false
+    }
+  },
+  "regras": [
+    {
+      "id": "R1",
+      "se": [
+        [
+          "liga",
+          "nao"
+        ],
+        [
+          "cheiro_queimado",
+          "sim"
+        ]
+      ],
+      "entao": [
+        "diagnostico",
+        "fonte_defeituosa"
+      ],
+      "cf": 95.0
+    },
+    {
+      "id": "R2",
+      "se": [
+        [
+          "liga",
+          "nao"
+        ],
+        [
+          "bipes",
+          "nenhum"
+        ],
+        [
+          "cheiro_queimado",
+          "nao"
+        ]
+      ],
+      "entao": [
+        "diagnostico",
+        "fonte_defeituosa"
+      ],
+      "cf": 60.0
+    },
+    {
+      "id": "R3",
+      "se": [
+        [
+          "liga",
+          "sim"
+        ],
+        [
+          "bipes",
+          "repetidos"
+        ]
+      ],
+      "entao": [
+        "diagnostico",
+        "memoria_ram"
+      ],
+      "cf": 85.0
+    },
+    {
+      "id": "R4",
+      "se": [
+        [
+          "liga",
+          "sim"
+        ],
+        [
+          "tela",
+          "preta"
+        ],
+        [
+          "bipes",
+          "repetidos"
+        ]
+      ],
+      "entao": [
+        "diagnostico",
+        "memoria_ram"
+      ],
+      "cf": 92.0
+    },
+    {
+      "id": "R5",
+      "se": [
+        [
+          "temperatura",
+          "alta"
+        ],
+        [
+          "ventoinha",
+          "parada"
+        ]
+      ],
+      "entao": [
+        "diagnostico",
+        "superaquecimento"
+      ],
+      "cf": 90.0
+    },
+    {
+      "id": "R6",
+      "se": [
+        [
+          "temperatura",
+          "alta"
+        ],
+        [
+          "poeira",
+          "sim"
+        ]
+      ],
+      "entao": [
+        "diagnostico",
+        "superaquecimento"
+      ],
+      "cf": 80.0
+    },
+    {
+      "id": "R7",
+      "se": [
+        [
+          "reinicia",
+          "sim"
+        ],
+        [
+          "temperatura",
+          "alta"
+        ]
+      ],
+      "entao": [
+        "diagnostico",
+        "superaquecimento"
+      ],
+      "cf": 75.0
+    },
+    {
+      "id": "R8",
+      "se": [
+        [
+          "lentidao",
+          "sim"
+        ],
+        [
+          "popups",
+          "sim"
+        ]
+      ],
+      "entao": [
+        "diagnostico",
+        "malware"
+      ],
+      "cf": 85.0
+    },
+    {
+      "id": "R9",
+      "se": [
+        [
+          "popups",
+          "sim"
+        ],
+        [
+          "programas_desconhecidos",
+          "sim"
+        ]
+      ],
+      "entao": [
+        "diagnostico",
+        "malware"
+      ],
+      "cf": 90.0
+    },
+    {
+      "id": "R10",
+      "se": [
+        [
+          "lentidao",
+          "sim"
+        ],
+        [
+          "programas_desconhecidos",
+          "sim"
+        ]
+      ],
+      "entao": [
+        "diagnostico",
+        "malware"
+      ],
+      "cf": 70.0
+    },
+    {
+      "id": "R11",
+      "se": [
+        [
+          "ruido_hd",
+          "sim"
+        ]
+      ],
+      "entao": [
+        "diagnostico",
+        "falha_disco"
+      ],
+      "cf": 80.0
+    },
+    {
+      "id": "R12",
+      "se": [
+        [
+          "erro_disco",
+          "sim"
+        ],
+        [
+          "lentidao",
+          "sim"
+        ]
+      ],
+      "entao": [
+        "diagnostico",
+        "falha_disco"
+      ],
+      "cf": 75.0
+    },
+    {
+      "id": "R13",
+      "se": [
+        [
+          "ruido_hd",
+          "sim"
+        ],
+        [
+          "erro_disco",
+          "sim"
+        ]
+      ],
+      "entao": [
+        "diagnostico",
+        "falha_disco"
+      ],
+      "cf": 95.0
+    },
+    {
+      "id": "R14",
+      "se": [
+        [
+          "tela",
+          "azul"
+        ],
+        [
+          "erro_disco",
+          "sim"
+        ]
+      ],
+      "entao": [
+        "diagnostico",
+        "falha_disco"
+      ],
+      "cf": 70.0
+    },
+    {
+      "id": "R15",
+      "se": [
+        [
+          "internet_neste_pc",
+          "nao"
+        ],
+        [
+          "internet_outros",
+          "nao"
+        ]
+      ],
+      "entao": [
+        "diagnostico",
+        "problema_provedor"
+      ],
+      "cf": 90.0
+    },
+    {
+      "id": "R16",
+      "se": [
+        [
+          "internet_neste_pc",
+          "nao"
+        ],
+        [
+          "internet_outros",
+          "sim"
+        ]
+      ],
+      "entao": [
+        "diagnostico",
+        "rede_local"
+      ],
+      "cf": 85.0
+    },
+    {
+      "id": "R17",
+      "se": [
+        [
+          "e_notebook",
+          "sim"
+        ],
+        [
+          "bateria_dura",
+          "sim"
+        ]
+      ],
+      "entao": [
+        "diagnostico",
+        "bateria_degradada"
+      ],
+      "cf": 85.0
+    },
+    {
+      "id": "R18",
+      "se": [
+        [
+          "tela",
+          "azul"
+        ],
+        [
+          "temperatura",
+          "alta"
+        ]
+      ],
+      "entao": [
+        "diagnostico",
+        "superaquecimento"
+      ],
+      "cf": 60.0
+    },
+    {
+      "id": "R19",
+      "se": [
+        [
+          "reinicia",
+          "sim"
+        ],
+        [
+          "temperatura",
+          "normal"
+        ],
+        [
+          "lentidao",
+          "sim"
+        ]
+      ],
+      "entao": [
+        "diagnostico",
+        "malware"
+      ],
+      "cf": 55.0
+    },
+    {
+      "id": "R20",
+      "se": [
+        [
+          "diagnostico",
+          "fonte_defeituosa"
+        ]
+      ],
+      "entao": [
+        "recomendacao",
+        "trocar_fonte"
+      ],
+      "cf": 100.0
+    },
+    {
+      "id": "R21",
+      "se": [
+        [
+          "diagnostico",
+          "memoria_ram"
+        ]
+      ],
+      "entao": [
+        "recomendacao",
+        "reassentar_testar_ram"
+      ],
+      "cf": 100.0
+    },
+    {
+      "id": "R22",
+      "se": [
+        [
+          "diagnostico",
+          "superaquecimento"
+        ]
+      ],
+      "entao": [
+        "recomendacao",
+        "limpar_e_pasta_termica"
+      ],
+      "cf": 100.0
+    },
+    {
+      "id": "R23",
+      "se": [
+        [
+          "diagnostico",
+          "malware"
+        ]
+      ],
+      "entao": [
+        "recomendacao",
+        "antivirus_e_backup"
+      ],
+      "cf": 100.0
+    },
+    {
+      "id": "R24",
+      "se": [
+        [
+          "diagnostico",
+          "falha_disco"
+        ]
+      ],
+      "entao": [
+        "recomendacao",
+        "backup_e_trocar_disco"
+      ],
+      "cf": 100.0
+    },
+    {
+      "id": "R25",
+      "se": [
+        [
+          "diagnostico",
+          "problema_provedor"
+        ]
+      ],
+      "entao": [
+        "recomendacao",
+        "reiniciar_roteador_contatar_provedor"
+      ],
+      "cf": 100.0
+    },
+    {
+      "id": "R26",
+      "se": [
+        [
+          "diagnostico",
+          "rede_local"
+        ]
+      ],
+      "entao": [
+        "recomendacao",
+        "verificar_drivers_e_config_rede"
+      ],
+      "cf": 100.0
+    },
+    {
+      "id": "R27",
+      "se": [
+        [
+          "diagnostico",
+          "bateria_degradada"
+        ]
+      ],
+      "entao": [
+        "recomendacao",
+        "substituir_bateria"
+      ],
+      "cf": 100.0
+    }
+  ]
+}

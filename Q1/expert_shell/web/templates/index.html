@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Expert Shell — Sistema Especialista</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">⌬</span>
+      <div>
+        <h1 id="dominio">Expert Shell</h1>
+        <p id="subtitulo" class="muted">Sistema baseado em conhecimento</p>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <label class="base-picker">
+        <span class="muted">Base</span>
+        <select id="seletor-base"></select>
+      </label>
+      <button id="btn-regras" class="btn ghost" type="button">Ver base</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="painel">
+
+      <!-- VIEW: escolha de estratégia -->
+      <div id="view-inicio" class="view">
+        <h2>Nova consulta</h2>
+        <p class="muted">Escolha como o sistema deve raciocinar para chegar ao diagnóstico.</p>
+        <div class="estrategias">
+          <button class="card-estrategia" data-modo="backward" type="button">
+            <h3>Backward</h3>
+            <p>Dirigida ao objetivo. Pergunta <strong>só o necessário</strong> para fechar o diagnóstico.</p>
+            <span class="tag">Recomendada</span>
+          </button>
+          <button class="card-estrategia" data-modo="forward" type="button">
+            <h3>Forward</h3>
+            <p>Dirigida pelos dados. Coleta as evidências e <strong>deduz</strong> tudo que for possível.</p>
+          </button>
+          <button class="card-estrategia" data-modo="hibrido" type="button">
+            <h3>Híbrida</h3>
+            <p>Consolida o que já se sabe (forward) e depois <strong>fecha o objetivo</strong> (backward).</p>
+          </button>
+        </div>
+      </div>
+
+      <!-- VIEW: pergunta -->
+      <div id="view-pergunta" class="view hidden">
+        <div class="progresso"><span id="contador-perguntas" class="muted"></span></div>
+        <h2 id="texto-pergunta">…</h2>
+        <p class="muted" id="nome-variavel"></p>
+        <div id="opcoes" class="opcoes"></div>
+        <div class="acoes-secundarias">
+          <button id="btn-naosei" class="btn ghost" type="button">Não sei</button>
+          <button id="btn-porque" class="btn link" type="button">Por quê esta pergunta?</button>
+        </div>
+        <div id="caixa-porque" class="explicacao hidden"></div>
+      </div>
+
+      <!-- VIEW: resultado -->
+      <div id="view-resultado" class="view hidden">
+        <h2>Resultado da consulta</h2>
+        <div id="resultado-conteudo"></div>
+        <div id="regras-disparadas" class="regras-disparadas"></div>
+        <button id="btn-nova" class="btn primary" type="button">Nova consulta</button>
+      </div>
+
+      <!-- VIEW: carregando / mensagem -->
+      <div id="view-carregando" class="view hidden">
+        <div class="spinner"></div>
+        <p class="muted">Processando…</p>
+      </div>
+
+      <div id="mensagem" class="mensagem hidden"></div>
+    </section>
+  </main>
+
+  <!-- Painel lateral: base de regras -->
+  <aside id="drawer" class="drawer hidden">
+    <div class="drawer-head">
+      <h2>Base de conhecimento</h2>
+      <button id="btn-fechar-drawer" class="btn icon" type="button" aria-label="Fechar">✕</button>
+    </div>
+    <div class="drawer-body">
+      <h3>Regras <span id="qtd-regras" class="muted"></span></h3>
+      <ul id="lista-regras" class="lista-regras"></ul>
+      <h3>Variáveis</h3>
+      <ul id="lista-variaveis" class="lista-variaveis"></ul>
+    </div>
+  </aside>
+  <div id="overlay" class="overlay hidden"></div>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+# Única dependência: Flask, para a interface web (run_web.py).
+# A CLI (main.py) e o motor não dependem de nada além da biblioteca padrão.
+# A extensão opcional de IA (explicações naturais) usa Ollama via HTTP local —
+# não precisa de nenhum pacote pip, apenas o Ollama instalado e rodando.
+flask==3.1.2

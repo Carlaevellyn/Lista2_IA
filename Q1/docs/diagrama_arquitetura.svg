@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 760" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#334155"/>
+    </marker>
+    <marker id="arrowOpen" markerWidth="12" markerHeight="12" refX="9" refY="3.5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3.5 L0,7" fill="none" stroke="#334155" stroke-width="1.4"/>
+    </marker>
+    <style>
+      .title  { font-size: 22px; font-weight: 700; fill: #0f172a; }
+      .sub    { font-size: 13px; fill: #475569; }
+      .box    { font-size: 15px; font-weight: 600; fill: #0f172a; }
+      .file   { font-size: 11.5px; fill: #64748b; font-style: italic; }
+      .note   { font-size: 12px; fill: #334155; }
+      .lab    { font-size: 11px; fill: #475569; }
+      .actor  { font-size: 14px; font-weight: 600; fill: #0f172a; }
+    </style>
+  </defs>
+
+  <!-- título -->
+  <text x="40" y="40" class="title">Arquitetura da Shell — Agente Baseado em Conhecimento</text>
+  <text x="40" y="62" class="sub">Diagnóstico e recomendação · genérica e reutilizável (o conhecimento é declarativo)</text>
+
+  <!-- atores -->
+  <g>
+    <rect x="40" y="95" width="180" height="58" rx="10" fill="#e2e8f0" stroke="#94a3b8"/>
+    <text x="130" y="120" text-anchor="middle" class="actor">Especialista</text>
+    <text x="130" y="139" text-anchor="middle" class="lab">define o conhecimento</text>
+  </g>
+  <g>
+    <rect x="900" y="95" width="180" height="58" rx="10" fill="#e2e8f0" stroke="#94a3b8"/>
+    <text x="990" y="120" text-anchor="middle" class="actor">Usuário final</text>
+    <text x="990" y="139" text-anchor="middle" class="lab">faz a consulta</text>
+  </g>
+
+  <!-- Editor -->
+  <g>
+    <rect x="40" y="200" width="220" height="70" rx="10" fill="#dbeafe" stroke="#3b82f6"/>
+    <text x="150" y="231" text-anchor="middle" class="box">Editor da Base</text>
+    <text x="150" y="252" text-anchor="middle" class="file">kb_editor.py · parser.py</text>
+  </g>
+
+  <!-- Base de Conhecimento -->
+  <g>
+    <rect x="40" y="330" width="220" height="92" rx="10" fill="#fef9c3" stroke="#ca8a04"/>
+    <text x="150" y="360" text-anchor="middle" class="box">Base de Conhecimento</text>
+    <text x="150" y="381" text-anchor="middle" class="file">knowledge_base.py</text>
+    <text x="150" y="402" text-anchor="middle" class="lab">fatos · regras · objetivos (JSON)</text>
+  </g>
+
+  <!-- Container Agente -->
+  <rect x="320" y="180" width="760" height="430" rx="14" fill="none" stroke="#cbd5e1" stroke-dasharray="6 5"/>
+  <text x="340" y="205" class="box" fill="#475569">AGENTE ESPECIALISTA  ·  shell.py  (integra os componentes)</text>
+
+  <!-- Motor de Inferência -->
+  <g>
+    <rect x="350" y="240" width="320" height="150" rx="10" fill="#dcfce7" stroke="#16a34a"/>
+    <text x="510" y="270" text-anchor="middle" class="box">Motor de Inferência</text>
+    <text x="510" y="290" text-anchor="middle" class="file">inference_engine.py</text>
+    <text x="510" y="316" text-anchor="middle" class="note">• Forward chaining (dados)</text>
+    <text x="510" y="336" text-anchor="middle" class="note">• Backward chaining (objetivo)</text>
+    <text x="510" y="356" text-anchor="middle" class="note">• Híbrido (misto)</text>
+    <text x="510" y="378" text-anchor="middle" class="lab">fatores de confiança (CF) · justificativas</text>
+  </g>
+
+  <!-- Explicação -->
+  <g>
+    <rect x="710" y="240" width="330" height="150" rx="10" fill="#fae8ff" stroke="#a21caf"/>
+    <text x="875" y="270" text-anchor="middle" class="box">Mecanismo de Explicação</text>
+    <text x="875" y="290" text-anchor="middle" class="file">explanation.py</text>
+    <text x="875" y="320" text-anchor="middle" class="note">Por quê?  → justifica a pergunta</text>
+    <text x="875" y="344" text-anchor="middle" class="note">Como?   → deriva a conclusão</text>
+    <text x="875" y="372" text-anchor="middle" class="lab">usa a pilha de objetivos e a árvore de regras</text>
+  </g>
+
+  <!-- Interface / provedores -->
+  <g>
+    <rect x="350" y="450" width="690" height="120" rx="10" fill="#ffedd5" stroke="#ea580c"/>
+    <text x="695" y="480" text-anchor="middle" class="box">Interface com o Usuário  ·  Provedores de Evidência</text>
+    <text x="695" y="500" text-anchor="middle" class="file">cli.py · shell.py (ProvedorCLI / ProvedorAutomatico)</text>
+    <text x="695" y="528" text-anchor="middle" class="note">Linha de comando (editor + consulta) · perguntas, "por que?", "nao sei"</text>
+    <text x="695" y="550" text-anchor="middle" class="lab">ponto de extensão para LLM (linguagem natural) — o raciocínio segue simbólico</text>
+  </g>
+
+  <!-- SETAS -->
+  <!-- especialista -> editor -->
+  <line x1="130" y1="153" x2="130" y2="200" stroke="#334155" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <!-- editor -> base (persiste) -->
+  <line x1="150" y1="270" x2="150" y2="330" stroke="#334155" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <text x="160" y="305" class="lab">persiste / edita</text>
+  <!-- base <-> motor -->
+  <line x1="260" y1="370" x2="350" y2="320" stroke="#334155" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <text x="262" y="356" class="lab">consulta</text>
+  <!-- motor <-> explicação -->
+  <line x1="670" y1="315" x2="710" y2="315" stroke="#334155" stroke-width="1.6" marker-start="url(#arrowOpen)" marker-end="url(#arrow)"/>
+  <!-- motor <-> interface -->
+  <line x1="510" y1="390" x2="510" y2="450" stroke="#334155" stroke-width="1.6" marker-start="url(#arrowOpen)" marker-end="url(#arrow)"/>
+  <text x="520" y="425" class="lab">pede evidência</text>
+  <!-- explicação -> interface -->
+  <line x1="875" y1="390" x2="875" y2="450" stroke="#334155" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <text x="885" y="425" class="lab">explicações</text>
+  <!-- usuário <-> interface -->
+  <line x1="990" y1="153" x2="990" y2="450" stroke="#334155" stroke-width="1.6" marker-start="url(#arrowOpen)" marker-end="url(#arrow)"/>
+  <text x="1000" y="300" class="lab">perguntas /</text>
+  <text x="1000" y="316" class="lab">respostas</text>
+
+  <!-- rodapé -->
+  <text x="40" y="650" class="note" font-weight="600">Fluxo:</text>
+  <text x="95" y="650" class="note">o especialista escreve a base → o usuário consulta → o motor infere com base nas regras → a interface coleta evidências → a explicação justifica.</text>
+  <text x="40" y="676" class="note" font-weight="600">Reuso:</text>
+  <text x="95" y="676" class="note">trocar de domínio = trocar o arquivo da base de conhecimento. O código da shell não muda.</text>
+</svg>

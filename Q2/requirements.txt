@@ -1,0 +1,2 @@
+# Q1 — Akinator Anime e CBR Médico (interfaces em Streamlit)
+streamlit>=1.30

@@ -1,0 +1,223 @@
+{
+  "dominio": "Diagnóstico de Pragas Agrícolas (tomate)",
+  "objetivos": [
+    "praga",
+    "tratamento"
+  ],
+  "variaveis": {
+    "folhas": {
+      "nome": "folhas",
+      "pergunta": "Como estão as folhas?",
+      "valores": [
+        "amareladas",
+        "manchas_escuras",
+        "buracos",
+        "normais"
+      ],
+      "perguntavel": true
+    },
+    "teias": {
+      "nome": "teias",
+      "pergunta": "Há teias finas sob as folhas?",
+      "valores": [
+        "sim",
+        "nao"
+      ],
+      "perguntavel": true
+    },
+    "insetos_verdes": {
+      "nome": "insetos_verdes",
+      "pergunta": "Vê pequenos insetos verdes nos brotos?",
+      "valores": [
+        "sim",
+        "nao"
+      ],
+      "perguntavel": true
+    },
+    "frutos": {
+      "nome": "frutos",
+      "pergunta": "Como estão os frutos?",
+      "valores": [
+        "podres",
+        "furados",
+        "normais"
+      ],
+      "perguntavel": true
+    },
+    "umidade": {
+      "nome": "umidade",
+      "pergunta": "A umidade do ambiente está alta?",
+      "valores": [
+        "sim",
+        "nao"
+      ],
+      "perguntavel": true
+    },
+    "praga": {
+      "nome": "praga",
+      "pergunta": "",
+      "valores": [
+        "acaro",
+        "pulgao",
+        "fungo_requeima",
+        "lagarta"
+      ],
+      "perguntavel": false
+    },
+    "tratamento": {
+      "nome": "tratamento",
+      "pergunta": "",
+      "valores": [
+        "acaricida_e_aumentar_umidade",
+        "oleo_de_neem_ou_inseticida",
+        "fungicida_e_reduzir_umidade",
+        "bacillus_thuringiensis"
+      ],
+      "perguntavel": false
+    }
+  },
+  "regras": [
+    {
+      "id": "R1",
+      "se": [
+        [
+          "teias",
+          "sim"
+        ],
+        [
+          "folhas",
+          "amareladas"
+        ]
+      ],
+      "entao": [
+        "praga",
+        "acaro"
+      ],
+      "cf": 90.0
+    },
+    {
+      "id": "R2",
+      "se": [
+        [
+          "insetos_verdes",
+          "sim"
+        ]
+      ],
+      "entao": [
+        "praga",
+        "pulgao"
+      ],
+      "cf": 88.0
+    },
+    {
+      "id": "R3",
+      "se": [
+        [
+          "folhas",
+          "manchas_escuras"
+        ],
+        [
+          "umidade",
+          "sim"
+        ]
+      ],
+      "entao": [
+        "praga",
+        "fungo_requeima"
+      ],
+      "cf": 85.0
+    },
+    {
+      "id": "R4",
+      "se": [
+        [
+          "frutos",
+          "furados"
+        ],
+        [
+          "folhas",
+          "buracos"
+        ]
+      ],
+      "entao": [
+        "praga",
+        "lagarta"
+      ],
+      "cf": 90.0
+    },
+    {
+      "id": "R5",
+      "se": [
+        [
+          "frutos",
+          "podres"
+        ],
+        [
+          "umidade",
+          "sim"
+        ]
+      ],
+      "entao": [
+        "praga",
+        "fungo_requeima"
+      ],
+      "cf": 70.0
+    },
+    {
+      "id": "R6",
+      "se": [
+        [
+          "praga",
+          "acaro"
+        ]
+      ],
+      "entao": [
+        "tratamento",
+        "acaricida_e_aumentar_umidade"
+      ],
+      "cf": 100.0
+    },
+    {
+      "id": "R7",
+      "se": [
+        [
+          "praga",
+          "pulgao"
+        ]
+      ],
+      "entao": [
+        "tratamento",
+        "oleo_de_neem_ou_inseticida"
+      ],
+      "cf": 100.0
+    },
+    {
+      "id": "R8",
+      "se": [
+        [
+          "praga",
+          "fungo_requeima"
+        ]
+      ],
+      "entao": [
+        "tratamento",
+        "fungicida_e_reduzir_umidade"
+      ],
+      "cf": 100.0
+    },
+    {
+      "id": "R9",
+      "se": [
+        [
+          "praga",
+          "lagarta"
+        ]
+      ],
+      "entao": [
+        "tratamento",
+        "bacillus_thuringiensis"
+      ],
+      "cf": 100.0
+    }
+  ]
+}

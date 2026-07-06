@@ -1,0 +1,14 @@
+# Dependências de TODAS as questões desta lista.
+# Instale uma única vez, a partir da raiz do repositório:
+#     python -m pip install -r requirements.txt
+#
+# (cada questão também tem seu próprio requirements.txt, caso queira rodar isolada)
+
+streamlit>=1.30      # Q2 (Akinator, CBR) e Q3 (agente/revisor) — interface web
+pypdf>=3.17          # Q3 — leitura do PDF do artigo
+flask==3.1.2         # Q1 — interface web opcional do Expert Shell (a CLI não usa)
+
+# Ollama NÃO é pacote pip — é um aplicativo externo (https://ollama.com), usado por:
+#   - Q1 (Expert Shell): OPCIONAL, só para explicações em linguagem natural;
+#   - Q3 (agente LLM):    NECESSÁRIO. Instale o app e rode:  ollama pull llama3.2
+# A comunicação com o Ollama usa só a biblioteca padrão (urllib): nada a instalar via pip.

@@ -1,4 +1,6 @@
-# Lista de Inteligência Artificial - Questão 2
+# Lista de Exercícios de IA — Questões 1, 2 e 3
+
+Repositório unificado com as três questões da lista. Cada questão fica em sua própria pasta, totalmente autocontida (código, base de conhecimento, testes e relatório técnico próprios).
 
 ## Integrantes
 
@@ -6,292 +8,50 @@
 * Jhennifer Kyria
 * Sthefany Barboza
 
----
+## Os sistemas
 
-# Questão 2.1 – Sistema de Inferência (Akinator Anime)
+| Pasta | Sistema | Técnica de IA | Relatório |
+|-------|---------|---------------|-----------|
+| [`Q1/`](Q1/) | **Expert Shell** — shell genérica para sistemas especialistas | Regras de produção · encadeamento forward/backward/híbrido · fatores de confiança (MYCIN) | [`Q1/docs/RELATORIO_TECNICO.md`](Q1/docs/RELATORIO_TECNICO.md) (+ PDF) |
+| [`Q2/`](Q2/) | **Akinator Anime** (inferência) + **CBR Médico** (diagnóstico) | Busca em espaço de hipóteses · Case-Based Reasoning (Retrieve/Reuse/Revise/Retain) | [`Q2/relatorios/`](Q2/relatorios/) (2 PDFs) |
+| [`Q3/`](Q3/) | **Agente de Revisão de Artigos** (baseado em LLM) | Agente LLM (Ollama) + *tool calling* · revisor de regras como ferramenta | [`Q3/RELATORIO_TECNICO.md`](Q3/RELATORIO_TECNICO.md) (+ PDF) |
 
-## Descrição
+Cada pasta tem seu próprio `README.md` com descrição completa, requisitos e instruções.
 
-Este projeto implementa um sistema de inferência inspirado no jogo Akinator, capaz de identificar personagens de anime a partir das respostas fornecidas pelo usuário.
+## Instalação única (todas as questões)
 
-O sistema utiliza uma base de conhecimento armazenada em JSON contendo personagens e seus atributos. Durante a execução, perguntas são realizadas ao usuário para reduzir o conjunto de hipóteses até encontrar o personagem mais provável.
-
----
-
-## Técnica Utilizada
-
-### Busca em Espaço de Hipóteses
-
-Inicialmente todos os personagens cadastrados são considerados candidatos.
-
-A cada resposta do usuário:
-
-* Personagens incompatíveis são eliminados;
-* O espaço de hipóteses é reduzido;
-* Novas perguntas são selecionadas automaticamente;
-* O processo continua até restar apenas uma hipótese ou uma hipótese mais provável.
-
----
-
-## Seleção Inteligente de Perguntas
-
-O sistema utiliza uma estratégia para escolher a próxima pergunta.
-
-A função busca o atributo que melhor divide os candidatos restantes, reduzindo o número de perguntas necessárias para identificar o personagem.
-
-Essa abordagem melhora a eficiência do processo de inferência.
-
----
-
-## Base de Conhecimento
-
-Arquivo:
-
-```text
-personagens.json
-```
-
-Cada personagem possui informações como:
-
-* nome
-* anime
-* humano
-* poder
-* pirata
-* ninja
-* estudante
-* protagonista
-* espada
-* vilao
-* professor
-* guerreiro
-* magico
-* anti_heroi
-* transformação
-* olhos_especiais
-
-entre outros atributos.
-
----
-
-## Ranking de Hipóteses
-
-Durante a execução o sistema calcula uma pontuação para cada candidato com base nas respostas fornecidas.
-
-As hipóteses mais compatíveis são apresentadas ao usuário juntamente com:
-
-* personagem mais provável;
-* quantidade de hipóteses restantes;
-* ranking dos candidatos.
-
----
-
-## Aprendizado
-
-Quando o sistema não consegue identificar corretamente o personagem, o usuário pode ensinar um novo personagem informando:
-
-* nome;
-* anime;
-* respostas dos atributos.
-
-O novo conhecimento é armazenado automaticamente na base.
-
----
-
-## Testes Automáticos
-
-O sistema possui uma aba exclusiva para avaliação.
-
-Para cada personagem cadastrado:
-
-1. O sistema simula uma partida automaticamente;
-2. Tenta identificar o personagem;
-3. Registra o resultado.
-
-Os resultados são armazenados em:
-
-```text
-testes.json
-```
-
----
-
-## Métricas de Avaliação
-
-São calculadas automaticamente:
-
-* Taxa de acerto;
-* Número de falhas;
-* Média de perguntas realizadas;
-* Histórico completo dos testes.
-
----
-
-## Funcionalidades
-
-* Inferência baseada em perguntas e respostas;
-* Eliminação automática de hipóteses;
-* Escolha inteligente de perguntas;
-* Ranking de candidatos;
-* Aprendizado incremental;
-* Persistência em JSON;
-* Testes automáticos;
-* Métricas de desempenho;
-* Interface gráfica desenvolvida com Streamlit.
-
----
-
-## Execução
+A partir da raiz do repositório, instale todas as dependências de uma vez:
 
 ```bash
-pip install streamlit
-streamlit run app.py
+python -m pip install -r requirements.txt
 ```
 
----
+> Cada questão também tem seu `requirements.txt` próprio, caso queira instalar/rodar apenas uma isoladamente.
 
-# Questão 2.4 – Sistema CBR (Case-Based Reasoning)
-
-## Descrição
-
-Este projeto implementa um sistema de diagnóstico médico simplificado utilizando a técnica de Raciocínio Baseado em Casos (CBR).
-
-O sistema compara os sintomas informados pelo usuário com casos armazenados previamente e sugere o diagnóstico e tratamento mais adequados.
-
----
-
-## Ciclo CBR Implementado
-
-### 1. Retrieve (Recuperação)
-
-Recupera os casos mais semelhantes ao problema informado.
-
-### 2. Reuse (Reutilização)
-
-Utiliza a solução do caso mais semelhante.
-
-### 3. Revise (Revisão)
-
-Permite que o usuário valide ou rejeite o diagnóstico sugerido.
-
-### 4. Retain (Retenção)
-
-Caso necessário, um novo caso pode ser armazenado na base de conhecimento.
-
----
-
-## Base de Conhecimento
-
-Arquivo:
-
-```text
-casos.json
-```
-
-Cada caso contém:
-
-* sintomas;
-* diagnóstico;
-* tratamento;
-* pesos dos sintomas.
-
----
-
-## Método de Similaridade
-
-O sistema utiliza similaridade ponderada por sintomas.
-
-Cada sintoma pode possuir um peso diferente, permitindo que sintomas mais importantes tenham maior influência no cálculo.
-
-A similaridade é calculada como:
-
-```text
-Similaridade =
-(pontos obtidos / pontos totais) × 100
-```
-
----
-
-## Recursos Implementados
-
-### Recuperação de Casos
-
-* Busca dos casos mais semelhantes;
-* Ordenação por similaridade;
-* Exibição do Top 3 resultados.
-
-### Explicabilidade
-
-Para cada caso recuperado são exibidos:
-
-* sintomas coincidentes;
-* sintomas ausentes;
-* percentual de similaridade;
-* pesos utilizados.
-
-### Nível de Confiança
-
-O sistema classifica automaticamente o resultado em:
-
-* 🟢 Alta
-* 🟡 Média
-* 🔴 Baixa
-
----
-
-## Estatísticas
-
-A aplicação possui uma aba dedicada para análise dos dados.
-
-São exibidos:
-
-* quantidade de casos cadastrados;
-* quantidade de diagnósticos distintos;
-* consultas realizadas;
-* média de similaridade;
-* diagnósticos mais frequentes;
-* histórico de consultas;
-* gráfico de distribuição dos diagnósticos.
-
----
-
-## Funcionalidades
-
-* Seleção de sintomas por checkboxes;
-* Observações do paciente;
-* Similaridade ponderada;
-* Top 3 casos mais semelhantes;
-* Diagnóstico sugerido;
-* Tratamento sugerido;
-* Validação do usuário;
-* Inclusão de novos casos;
-* Histórico de consultas;
-* Estatísticas da base;
-* Persistência em JSON;
-* Interface gráfica desenvolvida com Streamlit.
-
----
-
-## Execução
+## Como executar cada sistema
 
 ```bash
-pip install streamlit
-streamlit run CBR.py
+# Q1 — Expert Shell (CLI, só biblioteca padrão)
+cd Q1 && python main.py
+#   interface web opcional: python run_web.py   (requer flask)
+
+# Q2 — Akinator Anime
+cd Q2/Akinator && streamlit run app.py
+
+# Q2 — CBR Médico
+cd Q2/CBR && streamlit run CBR.py
+
+# Q3 — Agente de Revisão de Artigos (LLM via Ollama)
+cd Q3 && streamlit run agente_app.py    # agente conversacional (requer Ollama)
+#   revisor de regras avulso (sem LLM): streamlit run app.py
 ```
 
----
+## Requisitos
 
-# Tecnologias Utilizadas
+Python 3.11+. Dependências por questão:
 
-* Python 3
-* Streamlit
-* JSON
+* **Q1:** biblioteca padrão (CLI); `flask` para a interface web; **Ollama** *opcional* (explicações em linguagem natural)
+* **Q2:** `streamlit`
+* **Q3:** `streamlit`, `pypdf`; **Ollama** *necessário* para o agente LLM (o revisor avulso roda sem ele)
 
-# Técnicas de Inteligência Artificial
-
-* Busca em Espaço de Hipóteses
-* Sistemas de Inferência
-* Case-Based Reasoning (CBR)
-* Aprendizado Incremental
-* Recuperação Baseada em Similaridade
-
+> **Ollama não é um pacote pip** — é um aplicativo à parte ([ollama.com](https://ollama.com)). Instale-o e rode `ollama pull llama3.2` se for usar o agente da Q3 (ou a explicação natural opcional da Q1).
